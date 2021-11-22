@@ -1,15 +1,29 @@
+#include "GreedyStack.cpp"
 #include <fstream>
 #include <iostream>
-#include "GreedyStack.cpp"
 
 using namespace std;
 
-int main()
+int main(int argc, char *argv[])
 {
   int processes = 10, processors = 5;
 
   fstream input;
-  input.open("wyniki.txt", ios::in);
+
+  if (argc > 1)
+  {
+    input.open(argv[1], ios::in);
+  }
+  else
+  {
+    input.open("wyniki.txt", ios::in);
+  }
+
+  if (!input)
+  {
+    cout << "File doesn't exist." << endl;
+    return 0;
+  }
 
   input >> processors >> processes;
 
