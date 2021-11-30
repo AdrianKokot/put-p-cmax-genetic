@@ -12,10 +12,12 @@ int main(int argc, char *argv[]) {
         auto greedy = new Greedy(inputData);
         int greedyResult = greedy->getResult();
 
-        auto genetic = new Genetic(inputData, greedyResult);
+        auto genetic = new Genetic(inputData);
         int geneticResult = genetic->getResult();
 
-        cout << "|\tGreedy\t|\tGenetic\t|\n|\t------\t|\t-------\t|\n|\t" << greedyResult << "\t|\t" << geneticResult << "\t|\n";
+//        TODO: format output with std::setw
+        cout << "|\tGreedy\t|\tGenetic\t|\n|\t------\t|\t-------\t|\n|\t" << greedyResult << "\t|\t" << geneticResult
+             << "\t|\n";
 
     } catch (string msg) {
         cout << msg;
