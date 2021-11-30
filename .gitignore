@@ -34,5 +34,5 @@
 .idea
 .vscode
 
-
+cmake-build-debug
 obj
