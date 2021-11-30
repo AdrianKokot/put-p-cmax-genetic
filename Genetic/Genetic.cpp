@@ -1,32 +1,10 @@
-#include <fstream>
-#include <iostream>
+#include "Genetic.h"
 
-using namespace std;
+Genetic::Genetic(InputData *inputData, int greedyResult) {
+    this->input = inputData;
+    this->greedyResult = greedyResult;
+}
 
-int main(int argc, char *argv[])
-{
-  int processes, processors;
-
-  fstream input;
-
-  if (argc > 1)
-  {
-    input.open(argv[1], ios::in);
-  }
-  else
-  {
-    input.open("wyniki.txt", ios::in);
-  }
-
-  if (!input)
-  {
-    cout << "File doesn't exist." << endl;
+int Genetic::getResult() {
     return 0;
-  }
-
-  input >> processors >> processes;
-
-  cout << "To implement.";
-
-  return 0;
 }

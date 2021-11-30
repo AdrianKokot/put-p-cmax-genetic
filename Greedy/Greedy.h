@@ -1,8 +1,8 @@
 #ifndef PUT_OK_GREEDY_H
 #define PUT_OK_GREEDY_H
 
-#include "GreedyStack.cpp"
-#include "../Shared/InputData.cpp"
+#include "GreedyStack.h"
+#include "../Shared/InputData.h"
 
 class Greedy {
 private:
