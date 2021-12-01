@@ -1,50 +1,54 @@
 #include "Genetic.h"
 #include "../Config.cpp"
 
-//TEMP
-
+// Printing
 void Genetic::print(int *genotype) {
     for (int i = 0; i < this->input->processes; i++) {
-        cout << genotype[i] << ", ";
-    }
-}
-
-void Genetic::print(vector<pair<int, int>> *localPopulation) {
-    for (int i = 0; i < this->input->processors; i++) {
-        cout << "\nProcessor " << i << ": ";
-
-        for (int j = 0; j < localPopulation[i].size(); j++) {
-            cout << localPopulation[i][j].first << ", ";
+        if (i > 0) {
+            cout << ", ";
         }
+        cout << genotype[i];
     }
 }
 
-//ENDTEMP
+void Genetic::visualize(int *genotype) {
+    auto processorsWithProcesses = new vector<int>[this->input->processors];
+
+    for (int i = 0; i < this->input->processes; i++) {
+        processorsWithProcesses[genotype[i]].push_back(this->processAt(i));
+    }
+
+    for (int i = 0; i < this->input->processors; i++) {
+        cout << "Processor " << i << ": ";
+        int score = 0;
+        for (long long unsigned int j = 0; j < processorsWithProcesses[i].size(); j++) {
+            score += processorsWithProcesses[i][j];
+            cout << processorsWithProcesses[i][j] << " ";
+        }
+
+        cout << "\n\t\tDuration: " << score << "\n==================================\n";
+    }
+}
 
 // Data handling helpers
 int Genetic::processAt(int index) {
     return (*this->input)[index];
 }
 
-pair<int, int> Genetic::processNotation(int index) {
-    return make_pair(index, this->processAt(index));
-}
-
-
 // Random generator
-vector<pair<int, int>> *Genetic::generateRandomLocalPopulation() {
-    auto *localPopulation = new vector<pair<int, int>>[this->input->processors];
+int *Genetic::generateRandomLocalPopulation() {
+    auto population = new int[this->input->processes];
 
     for (int i = 0; i < this->input->processes; i++) {
         int processorId = this->random->processor();
-        localPopulation[processorId].emplace_back(this->processNotation(i));
+        population[i] = processorId;
     }
 
-    return localPopulation;
+    return population;
 }
 
-vector<pair<int, int>> **Genetic::generateRandomPopulation() {
-    auto population = new vector<pair<int, int>> *[POPULATION_SIZE];
+int **Genetic::generateRandomPopulation() {
+    auto population = new int *[POPULATION_SIZE];
 
     for (int i = 0; i < POPULATION_SIZE; i++) {
         population[i] = this->generateRandomLocalPopulation();
@@ -53,73 +57,46 @@ vector<pair<int, int>> **Genetic::generateRandomPopulation() {
     return population;
 }
 
-// Encode & decode
-
-int *Genetic::encode(vector<pair<int, int>> *localPopulation) {
-    auto genotype = new int[this->input->processes];
-
-    for (int processorId = 0; processorId < this->input->processors; processorId++) {
-        for (int j = 0; j < localPopulation[processorId].size(); j++) {
-            int processId = localPopulation[processorId][j].first;
-            genotype[processId] = processorId;
-        }
-    }
-
-    return genotype;
-}
-
-vector<pair<int, int>> *Genetic::decode(int *genotype) {
-    auto *localPopulation = new vector<pair<int, int>>[this->input->processors];
-
-    for (int i = 0; i < this->input->processes; i++) {
-        int processProcessorId = genotype[i];
-        localPopulation[processProcessorId].emplace_back(this->processNotation(i));
-    }
-
-    return localPopulation;
-}
-
 // Adaptation & selection
 
 int Genetic::adaptationScore(int *genotype) {
-    auto localPopulation = this->decode(genotype);
-    int genotypeScore = 0;
+    int score = 0;
+
+    auto processorsScore = new int[this->input->processors]{0};
+
+    for (int i = 0; i < this->input->processes; i++) {
+        processorsScore[genotype[i]] += this->processAt(i);
+    }
 
     for (int i = 0; i < this->input->processors; i++) {
-        int processorScore = 0;
-
-        for (int j = 0; j < localPopulation[i].size(); j++) {
-            processorScore += localPopulation[i][j].second;
-        }
-
-        if (processorScore > genotypeScore) {
-            genotypeScore = processorScore;
+        if (processorsScore[i] > score) {
+            score = processorsScore[i];
         }
     }
 
-    return -1 * genotypeScore;
+    return -1 * score;
 }
 
-vector<pair<int, int>> **Genetic::selection(vector<pair<int, int>> **population) {
-    pair<int, int> bestLocalPopulations[2];
-
-    bestLocalPopulations[0] = make_pair(INT_MIN, 0);
-    bestLocalPopulations[1] = make_pair(INT_MIN, 0);
+int **Genetic::selection(int **population) {
+    pair<int, int> best[2] = {
+            make_pair(INT_MIN, 0),
+            make_pair(INT_MIN, 0)
+    };
 
     for (int i = 0; i < POPULATION_SIZE; i++) {
-        int score = this->adaptationScore(this->encode(population[i]));
+        int score = this->adaptationScore(population[i]);
 
-        if (score > bestLocalPopulations[0].first) {
-            bestLocalPopulations[1] = bestLocalPopulations[0];
-            bestLocalPopulations[0] = make_pair(score, i);
-        } else if (score > bestLocalPopulations[1].first) {
-            bestLocalPopulations[1] = make_pair(score, i);
+        if (score > best[0].first) {
+            best[1] = best[0];
+            best[0] = make_pair(score, i);
+        } else if (score > best[1].first) {
+            best[1] = make_pair(score, i);
         }
     }
 
-    return new vector<pair<int, int>> *[2]{
-            population[bestLocalPopulations[0].second],
-            population[bestLocalPopulations[1].second]
+    return new int *[2]{
+            population[best[0].second],
+            population[best[1].second]
     };
 }
 
@@ -131,9 +108,7 @@ int **Genetic::crossover(int *firstGenotype, int *secondGenotype) {
     newPopulation[0] = new int[this->input->processes]{};
     newPopulation[1] = new int[this->input->processes]{};
 
-
     for (int i = 0; i < this->input->processes / 2; i++) {
-
         newPopulation[0][i] = firstGenotype[i];
         newPopulation[0][this->input->processes - i - 1] = secondGenotype[this->input->processes - i - 1];
         newPopulation[1][i] = secondGenotype[i];
@@ -157,6 +132,46 @@ void Genetic::mutation(int **population) {
 
 // Main
 
+void Genetic::breeding(int **population) {
+    auto best = this->selection(population);
+
+    auto children = this->crossover(best[0], best[1]);
+
+    pair<int, int> worst[2] = {
+            make_pair(this->adaptationScore(population[0]), 0),
+            make_pair(this->adaptationScore(population[1]), 1)
+    };
+
+    for (int i = 2; i < POPULATION_SIZE; i++) {
+        int score = -1 * this->adaptationScore(population[i]);
+
+        if (score > worst[0].first) {
+            worst[1] = worst[0];
+            worst[0] = make_pair(score, i);
+        } else if (score > worst[1].first) {
+            worst[1] = make_pair(score, i);
+        }
+    }
+
+    population[worst[0].second] = children[0];
+    population[worst[0].second] = children[1];
+}
+
+pair<int, int> Genetic::findBest(int **population) {
+    pair<int, int> currentBest = make_pair(this->adaptationScore(population[0]), 0);
+
+    for (int i = 1; i < POPULATION_SIZE; i++) {
+        int score = this->adaptationScore(population[i]);
+
+        if (score > currentBest.first) {
+            currentBest.first = score;
+            currentBest.second = i;
+        }
+    }
+
+    return currentBest;
+}
+
 Genetic::Genetic(InputData *inputData) {
     this->input = inputData;
 
@@ -164,77 +179,34 @@ Genetic::Genetic(InputData *inputData) {
 }
 
 int Genetic::getResult() {
-    int bestScore = INT_MIN;
-    int *bestGenotype;
+    pair<int, int *> best = make_pair(INT_MIN, new int[this->input->processes]{0});
 
     int withoutProgress = 0;
     auto population = this->generateRandomPopulation();
 
-    for (int x = 0; x < 256 && withoutProgress < 100; x++) {
-        cout << "Run " << x << endl;
-        auto bestLocalPopulations = this->selection(population);
+    int x = 0;
+    for (x = 0; x < MAX_LOOP_COUNT && withoutProgress < MAX_WITHOUT_PROGRESS; x++) {
+        this->breeding(population);
 
-        auto newChildren = this->crossover(
-                this->encode(bestLocalPopulations[0]),
-                this->encode(bestLocalPopulations[1])
-        );
+        this->mutation(population);
 
-        auto populationGenotype = new int*[POPULATION_SIZE];
+        auto currentBest = this->findBest(population);
 
-        for(int i = 0; i < POPULATION_SIZE; i++){
-            populationGenotype[i] = this->encode(population[i]);
-        }
+        if (currentBest.first > best.first) {
+            best.first = currentBest.first;
 
-        int idx1 = 0, idx2 = 1;
-        int idx1Score = this->adaptationScore(populationGenotype[0]),
-                idx2Score = this->adaptationScore(populationGenotype[1]);
-
-        for (int i = 2; i < POPULATION_SIZE; i++) {
-            int score = this->adaptationScore(populationGenotype[i]);
-
-            if (score < idx1Score) {
-                idx2 = idx1;
-                idx2Score = idx1Score;
-                idx1 = i;
-                idx1Score = score;
-            } else if (score < idx2Score) {
-                idx2Score = score;
-                idx2 = i;
+            for (int i = 0; i < this->input->processes; i++) {
+                best.second[i] = population[currentBest.second][i];
             }
-        }
 
-        populationGenotype[idx1] = newChildren[0];
-        populationGenotype[idx2] = newChildren[1];
-
-        this->mutation(populationGenotype);
-
-        int currentBestScore = this->adaptationScore(populationGenotype[0]);
-        int currentBestScoreIdx = 0;
-
-        for (int i = 1; i < POPULATION_SIZE; i++) {
-            int score = this->adaptationScore(populationGenotype[i]);
-
-            if (score > currentBestScore) {
-                currentBestScore = score;
-                currentBestScoreIdx = i;
-            }
-        }
-
-        if (currentBestScore > bestScore) {
-            bestScore = currentBestScore;
-            bestGenotype = populationGenotype[currentBestScoreIdx];
             withoutProgress = 0;
         } else {
             withoutProgress++;
         }
-
     }
 
-    cout << "\n===============\nBest genotype:\n";
+    this->visualize(best.second);
+//    cout << "\nBreak on x: " << x << " and no progress count: " << withoutProgress << endl;
 
-
-    this->print(bestGenotype);
-    cout << "\n===============\n\n";
-
-    return -1 * bestScore;
+    return -1 * best.first;
 }

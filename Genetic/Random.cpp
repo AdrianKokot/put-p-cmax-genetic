@@ -1,8 +1,10 @@
 #include "Random.h"
+#include <time.h>
 
 Random::Random(int processCount, int processorCount) {
-    random_device dev;
-    this->gen = (mt19937(dev()));
+    this->gen = (mt19937(random_device()()));
+//    this->gen.seed(time(NULL));
+
     this->processDistr = uniform_int_distribution<>(0, processCount - 1);
     this->processorDistr = uniform_int_distribution<>(0, processorCount - 1);
     this->percentageDistr = uniform_int_distribution<>(0, 100);

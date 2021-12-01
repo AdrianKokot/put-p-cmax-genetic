@@ -14,27 +14,25 @@ private:
 
     int processAt(int index);
 
-    pair<int, int> processNotation(int index);
-
-    void print(vector<pair<int, int>> *localPopulation);
-
     void print(int *genotype);
 
-    vector<pair<int, int>> *generateRandomLocalPopulation();
+    void visualize(int *genotype);
 
-    vector<pair<int, int>> **generateRandomPopulation();
+    int *generateRandomLocalPopulation();
 
-    int *encode(vector<pair<int, int>> *localPopulation);
-
-    vector<pair<int, int>> *decode(int *genotype);
+    int **generateRandomPopulation();
 
     int adaptationScore(int *genotype);
 
-    vector<pair<int, int>> **selection(vector<pair<int, int>> **population);
+    int **selection(int **population);
 
     int **crossover(int *firstGenotype, int *secondGenotype);
 
     void mutation(int **population);
+
+    void breeding(int **population);
+
+    pair<int,int> findBest(int **population);
 
     Random *random;
 

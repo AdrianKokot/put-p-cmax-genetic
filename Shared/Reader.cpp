@@ -1,6 +1,6 @@
 #include "Reader.h"
 
-const string Reader::defaultFile = "wyniki.txt";
+const string Reader::defaultFile = "../instances/2m50.txt";
 
 InputData *Reader::readInput(int argc, char **argv) {
     fstream input;
