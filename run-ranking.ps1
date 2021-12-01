@@ -1,4 +1,4 @@
-g++ -I./Genetic -I./Shared -I./Greedy .\Shared\*.cpp .\Greedy\*.cpp .\Genetic\*.cpp main.cpp -o result.exe
+g++ -I./Genetic -I./Shared -I./Greedy .\Shared\*.cpp .\Greedy\*.cpp .\Genetic\*.cpp main.cpp Config.cpp -o result.exe
 
 Get-ChildItem .\instances\ | sort Name | % {
   $name = $_.Name;
