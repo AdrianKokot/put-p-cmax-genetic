@@ -1,5 +1,7 @@
 #include "Genetic.h"
 #include "../Config.cpp"
+#include <fstream>
+#include <ctime>
 
 // Printing
 void Genetic::print(int *genotype) {
@@ -11,7 +13,7 @@ void Genetic::print(int *genotype) {
     }
 }
 
-void Genetic::visualize(int *genotype) {
+void Genetic::visualize(int *genotype, ostream& output) {
     auto processorsWithProcesses = new vector<int>[this->input->processors];
 
     for (int i = 0; i < this->input->processes; i++) {
@@ -19,14 +21,14 @@ void Genetic::visualize(int *genotype) {
     }
 
     for (int i = 0; i < this->input->processors; i++) {
-        cout << "Processor " << i << ": ";
+        output << "Processor " << i << ": ";
         int score = 0;
         for (long long unsigned int j = 0; j < processorsWithProcesses[i].size(); j++) {
             score += processorsWithProcesses[i][j];
-            cout << processorsWithProcesses[i][j] << " ";
+            output << processorsWithProcesses[i][j] << " ";
         }
 
-        cout << "\n\t\tDuration: " << score << "\n==================================\n";
+        output << "\n\t\tDuration: " << score << "\n==================================\n";
     }
 }
 
@@ -74,6 +76,8 @@ int Genetic::adaptationScore(int *genotype) {
         }
     }
 
+    delete processorsScore;
+
     return -1 * score;
 }
 
@@ -108,11 +112,19 @@ int **Genetic::crossover(int *firstGenotype, int *secondGenotype) {
     newPopulation[0] = new int[this->input->processes]{};
     newPopulation[1] = new int[this->input->processes]{};
 
-    for (int i = 0; i < this->input->processes / 2; i++) {
+    int proportion = (this->random->percentage() % 10) / 10;
+
+    int firstPartIndex = this->input->processes * proportion;
+
+    int i = 0;
+    for (; i < firstPartIndex; i++) {
         newPopulation[0][i] = firstGenotype[i];
-        newPopulation[0][this->input->processes - i - 1] = secondGenotype[this->input->processes - i - 1];
         newPopulation[1][i] = secondGenotype[i];
-        newPopulation[1][this->input->processes - i - 1] = firstGenotype[this->input->processes - i - 1];
+    }
+
+    for(; i < this->input->processes; i++) {
+        newPopulation[0][i] = secondGenotype[i];
+        newPopulation[1][i] = firstGenotype[i];
     }
 
     return newPopulation;
@@ -153,8 +165,11 @@ void Genetic::breeding(int **population) {
         }
     }
 
+    delete population[worst[0].second];
+    delete population[worst[1].second];
+
     population[worst[0].second] = children[0];
-    population[worst[0].second] = children[1];
+    population[worst[1].second] = children[1];
 }
 
 pair<int, int> Genetic::findBest(int **population) {
@@ -185,8 +200,11 @@ int Genetic::getResult() {
     auto population = this->generateRandomPopulation();
 
     int x = 0;
-    for (x = 0; x < MAX_LOOP_COUNT && withoutProgress < MAX_WITHOUT_PROGRESS; x++) {
-        this->breeding(population);
+    for (x = 0; x < INT_MAX && withoutProgress < MAX_WITHOUT_PROGRESS; x++) {
+
+        for (int i = 0; i < POPULATION_SIZE / 10; i++) {
+            this->breeding(population);
+        }
 
         this->mutation(population);
 
@@ -205,8 +223,11 @@ int Genetic::getResult() {
         }
     }
 
-    this->visualize(best.second);
-//    cout << "\nBreak on x: " << x << " and no progress count: " << withoutProgress << endl;
+    fstream output;
+    output.open("./logs/" + to_string(time(NULL)) + ".log", ios::out);
+
+    this->visualize(best.second, output);
+    output << "\n\nScore: " << -1 * best.first << endl;
 
     return -1 * best.first;
 }

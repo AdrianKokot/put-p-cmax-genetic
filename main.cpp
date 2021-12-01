@@ -9,17 +9,17 @@ int main(int argc, char *argv[]) {
     try {
         auto inputData = Reader::readInput(argc, argv);
 
-        auto greedy = new Greedy(inputData);
-        int greedyResult = greedy->getResult();
+        // auto greedy = new Greedy(inputData);
+        // int greedyResult = greedy->getResult();
 
         auto genetic = new Genetic(inputData);
         int geneticResult = genetic->getResult();
 
-//        TODO: format output with std::setw
-        cout << "|\tGreedy\t|\tGenetic\t|\n|\t------\t|\t-------\t|\n|\t" << greedyResult << "\t|\t" << geneticResult
-             << "\t|\n";
+        // cout << "Greedy:  " << greedyResult << "\nGenetic: " << geneticResult;
 
-    } catch (string msg) {
+        cout << geneticResult;
+
+    } catch (const char* msg) {
         cout << msg;
     }
 

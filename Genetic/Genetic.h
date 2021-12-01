@@ -16,7 +16,7 @@ private:
 
     void print(int *genotype);
 
-    void visualize(int *genotype);
+    void visualize(int *genotype, ostream& output);
 
     int *generateRandomLocalPopulation();
 

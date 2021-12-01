@@ -3,7 +3,7 @@
 
 Random::Random(int processCount, int processorCount) {
     this->gen = (mt19937(random_device()()));
-//    this->gen.seed(time(NULL));
+    this->gen.seed(time(NULL));
 
     this->processDistr = uniform_int_distribution<>(0, processCount - 1);
     this->processorDistr = uniform_int_distribution<>(0, processorCount - 1);
