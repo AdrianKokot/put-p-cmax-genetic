@@ -19,6 +19,9 @@ void GreedyStack::addProcessAt(int index, int processLength) {
     this->stack[index].second += processLength;
     this->listWithProcesses[id].push_back(processLength);
 
+    this->population[this->processId] = id;
+    this->processId++;
+
     this->sortStack(index);
 }
 

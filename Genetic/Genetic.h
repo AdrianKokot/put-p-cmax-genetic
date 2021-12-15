@@ -5,6 +5,8 @@
 #include <vector>
 #include <iostream>
 #include "Random.h"
+#include "../Greedy/Greedy.h"
+
 
 using namespace std;
 
@@ -16,9 +18,9 @@ private:
 
     void print(int *genotype);
 
-    void visualize(int *genotype, ostream& output);
-
     int *generateRandomLocalPopulation();
+
+    int **generateGreedyPopulation();
 
     int **generateRandomPopulation();
 
@@ -35,11 +37,17 @@ private:
     pair<int,int> findBest(int **population);
 
     Random *random;
+    Greedy *greedy;
 
+    int *bestLocalPopulation;
 public:
     Genetic(InputData *inputData);
 
     int getResult();
+
+    int *getPopulation();
+
+    void visualize(ostream& output);
 
 };
 

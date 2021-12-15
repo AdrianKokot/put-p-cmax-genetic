@@ -2,6 +2,7 @@
 #include "../Config.cpp"
 #include <fstream>
 #include <ctime>
+#include <iomanip>
 
 // Printing
 void Genetic::print(int *genotype) {
@@ -13,7 +14,16 @@ void Genetic::print(int *genotype) {
     }
 }
 
-void Genetic::visualize(int *genotype, ostream& output) {
+void Genetic::visualize(ostream &output) {
+    auto genotype = this->getPopulation();
+    output << std::setw(128) << "Genotype" << endl <<std::string(128, '=') << endl;
+
+    for(int i = 0; i < this->input->processes; i++) {
+        output << genotype[i] << ", ";
+    }
+
+    output << endl << endl << std::setw(128) << "Assigment list" << endl <<std::string(128, '=') << endl;
+
     auto processorsWithProcesses = new vector<int>[this->input->processors];
 
     for (int i = 0; i < this->input->processes; i++) {
@@ -28,7 +38,7 @@ void Genetic::visualize(int *genotype, ostream& output) {
             output << processorsWithProcesses[i][j] << " ";
         }
 
-        output << "\n\t\tDuration: " << score << "\n==================================\n";
+        output << endl << "Duration: " << score << endl;
     }
 }
 
@@ -44,6 +54,16 @@ int *Genetic::generateRandomLocalPopulation() {
     for (int i = 0; i < this->input->processes; i++) {
         int processorId = this->random->processor();
         population[i] = processorId;
+    }
+
+    return population;
+}
+
+int **Genetic::generateGreedyPopulation() {
+    auto population = new int *[POPULATION_SIZE];
+
+    for (int i = 0; i < POPULATION_SIZE; i++) {
+        population[i] = this->greedy->getPopulation(i);
     }
 
     return population;
@@ -122,7 +142,7 @@ int **Genetic::crossover(int *firstGenotype, int *secondGenotype) {
         newPopulation[1][i] = secondGenotype[i];
     }
 
-    for(; i < this->input->processes; i++) {
+    for (; i < this->input->processes; i++) {
         newPopulation[0][i] = secondGenotype[i];
         newPopulation[1][i] = firstGenotype[i];
     }
@@ -189,6 +209,7 @@ pair<int, int> Genetic::findBest(int **population) {
 
 Genetic::Genetic(InputData *inputData) {
     this->input = inputData;
+    this->greedy = new Greedy(inputData);
 
     this->random = new Random(this->input->processes, this->input->processors);
 }
@@ -223,11 +244,11 @@ int Genetic::getResult() {
         }
     }
 
-    fstream output;
-    output.open("./logs/" + to_string(time(NULL)) + ".log", ios::out);
-
-    this->visualize(best.second, output);
-    output << "\n\nScore: " << -1 * best.first << endl;
+    this->bestLocalPopulation = best.second;
 
     return -1 * best.first;
+}
+
+int *Genetic::getPopulation() {
+    return this->bestLocalPopulation;
 }

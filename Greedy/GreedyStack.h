@@ -15,6 +15,7 @@ private:
 
     void sortStack(int);
 
+    int processId = 0;
 public:
     GreedyStack(int);
 
@@ -23,6 +24,8 @@ public:
     void addProcessAt(int, int);
 
     int valueAt(int);
+
+    int *population;
 };
 
 #endif //PUT_OK_GREEDYSTACK_H

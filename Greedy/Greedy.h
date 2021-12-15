@@ -10,7 +10,9 @@ private:
 public:
     Greedy(InputData *);
 
-    int getResult();
+    int getResult(int step = 0);
+
+    int *getPopulation(int step = 0);
 };
 
 #endif //PUT_OK_GREEDY_H

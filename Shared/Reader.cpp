@@ -17,6 +17,8 @@ InputData *Reader::readInput(int argc, char **argv) {
 
     InputData *inputData = new InputData(processors, processes);
 
+    inputData->fileName = argc > 1 ? argv[1] : Reader::defaultFile;
+
     for (int i = 0; i < inputData->processes; i++) {
         input >> (*inputData)[i];
     }

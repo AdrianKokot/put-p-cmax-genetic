@@ -1,6 +1,6 @@
 g++ -I./Genetic -I./Shared -I./Greedy .\Shared\*.cpp .\Greedy\*.cpp .\Genetic\*.cpp main.cpp Config.cpp -o result.exe
 
-Get-ChildItem .\instances\ | sort Name | % {
+Get-ChildItem .\instances\ | where Name -notlike "*_best*" | sort Name | % {
   $name = $_.Name;
   Write-Host $name -ForegroundColor Green;
   $path = "./instances/$name"; 

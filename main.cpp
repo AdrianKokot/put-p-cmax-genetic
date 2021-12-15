@@ -9,17 +9,30 @@ int main(int argc, char *argv[]) {
     try {
         auto inputData = Reader::readInput(argc, argv);
 
-        // auto greedy = new Greedy(inputData);
-        // int greedyResult = greedy->getResult();
-
         auto genetic = new Genetic(inputData);
         int geneticResult = genetic->getResult();
 
-        // cout << "Greedy:  " << greedyResult << "\nGenetic: " << geneticResult;
-
         cout << geneticResult;
 
-    } catch (const char* msg) {
+        fstream output;
+
+        auto logFileName = inputData->fileName.replace(inputData->fileName.length() - 4, 9, "_best.txt");
+
+        output.open(logFileName,ios::in);
+
+        int bestFromFile;
+        output >> bestFromFile;
+
+        if (geneticResult < bestFromFile) {
+            output.close();
+
+            output.open(logFileName, ios::out | ios::trunc);
+            output << geneticResult << endl << endl;
+
+            genetic->visualize(output);
+        }
+
+    } catch (const char *msg) {
         cout << msg;
     }
 

@@ -17,6 +17,8 @@ public:
     int length();
 
     int &operator[](int);
+
+    std::string fileName;
 };
 
 #endif //PUT_OK_INPUTDATA_H
