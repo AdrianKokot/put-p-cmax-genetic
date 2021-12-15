@@ -1,108 +1,108 @@
-160
+159
 
                                                                                                                         Genotype
 ================================================================================================================================
-3, 9, 9, 15, 11, 28, 14, 46, 24, 7, 10, 9, 43, 26, 39, 8, 27, 49, 12, 19, 25, 38, 12, 36, 48, 6, 38, 47, 33, 2, 2, 25, 31, 33, 35, 22, 34, 45, 41, 19, 18, 24, 42, 29, 17, 46, 7, 8, 21, 10, 28, 1, 3, 3, 32, 16, 0, 42, 20, 30, 17, 21, 1, 13, 31, 18, 34, 26, 40, 29, 48, 45, 22, 23, 5, 41, 4, 44, 37, 44, 47, 4, 37, 5, 40, 11, 36, 14, 6, 23, 49, 39, 20, 43, 27, 13, 16, 15, 30, 32, 0, 
+15, 10, 9, 34, 36, 10, 6, 11, 19, 1, 45, 14, 7, 13, 43, 25, 48, 38, 31, 39, 24, 41, 44, 4, 35, 20, 29, 27, 21, 47, 34, 24, 47, 16, 11, 49, 18, 26, 38, 36, 40, 14, 33, 39, 5, 31, 6, 8, 13, 12, 2, 1, 46, 9, 10, 9, 3, 23, 8, 0, 21, 22, 2, 12, 42, 33, 30, 26, 5, 37, 40, 32, 20, 18, 17, 49, 27, 37, 28, 29, 35, 4, 17, 28, 3, 25, 32, 45, 44, 46, 15, 41, 42, 43, 23, 30, 48, 22, 19, 7, 0, 
 
                                                                                                                   Assigment list
 ================================================================================================================================
-Processor 0: 55 99 
+Processor 0: 58 99 
+Duration: 157
+Processor 1: 57 99 
+Duration: 156
+Processor 2: 98 61 
+Duration: 159
+Processor 3: 55 83 
+Duration: 138
+Processor 4: 71 80 
+Duration: 151
+Processor 5: 92 67 
+Duration: 159
+Processor 6: 54 94 
+Duration: 148
+Processor 7: 60 98 
+Duration: 158
+Processor 8: 95 57 
+Duration: 152
+Processor 9: 50 52 54 
+Duration: 156
+Processor 10: 50 53 53 
+Duration: 156
+Processor 11: 55 82 
+Duration: 137
+Processor 12: 97 62 
+Duration: 159
+Processor 13: 61 96 
+Duration: 157
+Processor 14: 59 89 
+Duration: 148
+Processor 15: 50 89 
+Duration: 139
+Processor 16: 81 
+Duration: 81
+Processor 17: 73 81 
 Duration: 154
-Processor 1: 99 61 
-Duration: 160
-Processor 2: 77 78 
-Duration: 155
-Processor 3: 50 51 52 
+Processor 18: 84 72 
+Duration: 156
+Processor 19: 56 97 
 Duration: 153
-Processor 4: 75 80 
-Duration: 155
-Processor 5: 73 82 
-Duration: 155
-Processor 6: 73 87 
-Duration: 160
-Processor 7: 57 94 
-Duration: 151
-Processor 8: 63 95 
-Duration: 158
-Processor 9: 50 50 59 
-Duration: 159
-Processor 10: 58 97 
-Duration: 155
-Processor 11: 52 84 
-Duration: 136
-Processor 12: 66 70 
-Duration: 136
-Processor 13: 62 94 
+Processor 20: 73 71 
+Duration: 144
+Processor 21: 76 59 
+Duration: 135
+Processor 22: 60 96 
 Duration: 156
-Processor 14: 54 86 
-Duration: 140
-Processor 15: 51 96 
-Duration: 147
-Processor 16: 54 95 
+Processor 23: 56 93 
 Duration: 149
-Processor 17: 92 59 
-Duration: 151
-Processor 18: 88 64 
-Duration: 152
-Processor 19: 67 87 
-Duration: 154
-Processor 20: 57 91 
-Duration: 148
-Processor 21: 96 60 
-Duration: 156
-Processor 22: 83 71 
-Duration: 154
-Processor 23: 72 88 
-Duration: 160
-Processor 24: 56 89 
-Duration: 145
-Processor 25: 68 79 
+Processor 24: 68 79 
 Duration: 147
-Processor 26: 61 66 
-Duration: 127
-Processor 27: 64 93 
-Duration: 157
-Processor 28: 53 98 
+Processor 25: 63 84 
+Duration: 147
+Processor 26: 85 66 
 Duration: 151
-Processor 29: 91 68 
-Duration: 159
-Processor 30: 58 97 
-Duration: 155
-Processor 31: 80 63 
-Duration: 143
-Processor 32: 53 98 
-Duration: 151
-Processor 33: 76 81 
-Duration: 157
-Processor 34: 84 65 
-Duration: 149
-Processor 35: 82 
-Duration: 82
-Processor 36: 71 85 
-Duration: 156
-Processor 37: 77 81 
-Duration: 158
-Processor 38: 69 74 
-Duration: 143
-Processor 39: 62 90 
-Duration: 152
-Processor 40: 67 83 
+Processor 27: 75 75 
 Duration: 150
-Processor 41: 86 74 
-Duration: 160
-Processor 42: 90 56 
-Duration: 146
-Processor 43: 60 92 
+Processor 28: 77 82 
+Duration: 159
+Processor 29: 74 78 
 Duration: 152
-Processor 44: 76 78 
-Duration: 154
-Processor 45: 85 70 
+Processor 30: 65 94 
+Duration: 159
+Processor 31: 66 93 
+Duration: 159
+Processor 32: 70 85 
 Duration: 155
-Processor 46: 55 93 
-Duration: 148
-Processor 47: 75 79 
+Processor 33: 90 64 
 Duration: 154
-Processor 48: 72 69 
-Duration: 141
-Processor 49: 65 89 
+Processor 34: 51 78 
+Duration: 129
+Processor 35: 72 79 
+Duration: 151
+Processor 36: 52 87 
+Duration: 139
+Processor 37: 68 76 
+Duration: 144
+Processor 38: 65 86 
+Duration: 151
+Processor 39: 67 91 
+Duration: 158
+Processor 40: 88 69 
+Duration: 157
+Processor 41: 69 90 
+Duration: 159
+Processor 42: 63 91 
 Duration: 154
+Processor 43: 62 92 
+Duration: 154
+Processor 44: 70 87 
+Duration: 157
+Processor 45: 58 86 
+Duration: 144
+Processor 46: 51 88 
+Duration: 139
+Processor 47: 77 80 
+Duration: 157
+Processor 48: 64 95 
+Duration: 159
+Processor 49: 83 74 
+Duration: 157

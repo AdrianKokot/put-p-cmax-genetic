@@ -6,6 +6,6 @@ const int POPULATION_SIZE = 256;
 const int MAX_WITHOUT_PROGRESS = 1000;
 
 // In percentage
-const int MUTATION_PROBABILITY = 15;
+const int MUTATION_PROBABILITY = 20;
 
 #endif //PUT_OK_CONFIG
