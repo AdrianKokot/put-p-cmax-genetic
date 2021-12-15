@@ -1,9 +1,10 @@
 #include "GreedyStack.h"
 
-GreedyStack::GreedyStack(int processorNum) {
+GreedyStack::GreedyStack(int processorNum, int processesNum) {
     this->stack = new pair<int, int>[processorNum];
     this->stackLength = processorNum;
     this->listWithProcesses = new vector<int>[processorNum];
+    this->population = new int[processesNum];
 
     for (int i = 0; i < this->stackLength; i++) {
         this->stack[i] = pair<int, int>(i, 0);

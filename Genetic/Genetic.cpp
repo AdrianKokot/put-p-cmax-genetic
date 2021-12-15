@@ -63,7 +63,7 @@ int **Genetic::generateGreedyPopulation() {
     auto population = new int *[POPULATION_SIZE];
 
     for (int i = 0; i < POPULATION_SIZE; i++) {
-        population[i] = this->greedy->getPopulation(i);
+        population[i] = this->greedy->getPopulation();
     }
 
     return population;
@@ -218,7 +218,7 @@ int Genetic::getResult() {
     pair<int, int *> best = make_pair(INT_MIN, new int[this->input->processes]{0});
 
     int withoutProgress = 0;
-    auto population = this->generateRandomPopulation();
+    auto population = this->generateGreedyPopulation();
 
     int x = 0;
     for (x = 0; x < INT_MAX && withoutProgress < MAX_WITHOUT_PROGRESS; x++) {

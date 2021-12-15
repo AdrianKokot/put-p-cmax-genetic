@@ -17,7 +17,7 @@ private:
 
     int processId = 0;
 public:
-    GreedyStack(int);
+    GreedyStack(int, int);
 
     int length();
 

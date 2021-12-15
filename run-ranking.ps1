@@ -4,8 +4,9 @@ Get-ChildItem .\instances\ | where Name -notlike "*_best*" | sort Name | % {
   $name = $_.Name;
   Write-Host $name -ForegroundColor Green;
   $path = "./instances/$name"; 
-  .\result.exe $path;
-#   Write-Host $result -ForegroundColor Yellow;
+  $result =  .\result.exe $path;
+  $currBest = get-content $path.Replace(".txt", "_best.txt") -First 1;
+  "$result - current best: $currBest";
   Write-Host "";
 }
 
