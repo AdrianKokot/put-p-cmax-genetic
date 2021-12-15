@@ -16,13 +16,13 @@ void Genetic::print(int *genotype) {
 
 void Genetic::visualize(ostream &output) {
     auto genotype = this->getPopulation();
-    output << std::setw(128) << "Genotype" << endl <<std::string(128, '=') << endl;
+    output << std::setw(128) << "Genotype" << endl << std::string(128, '=') << endl;
 
-    for(int i = 0; i < this->input->processes; i++) {
+    for (int i = 0; i < this->input->processes; i++) {
         output << genotype[i] << ", ";
     }
 
-    output << endl << endl << std::setw(128) << "Assigment list" << endl <<std::string(128, '=') << endl;
+    output << endl << endl << std::setw(128) << "Assigment list" << endl << std::string(128, '=') << endl;
 
     auto processorsWithProcesses = new vector<int>[this->input->processors];
 
@@ -151,13 +151,26 @@ int **Genetic::crossover(int *firstGenotype, int *secondGenotype) {
 }
 
 void Genetic::mutation(int **population) {
+    const int maxTries = 50;
     for (int i = 0; i < POPULATION_SIZE; i++) {
         int rand = this->random->percentage();
         if (rand <= MUTATION_PROBABILITY) {
-            int randProcess = this->random->process();
-            int randProcessor = this->random->processor();
+            int randProcess = this->random->process(),
+                    randProcessor;
 
-            population[i][randProcess] = randProcessor;
+            int tryId = 0;
+
+            int currAdaptationScore = this->adaptationScore(population[i]);
+            do {
+                randProcessor = this->random->processor();
+                population[i][randProcess] = randProcessor;
+                tryId++;
+
+                if (tryId > maxTries) {
+                    break;
+                }
+
+            } while (currAdaptationScore > this->adaptationScore(population[i]));
         }
     }
 }
@@ -223,7 +236,7 @@ int Genetic::getResult() {
     int x = 0;
     for (x = 0; x < INT_MAX && withoutProgress < MAX_WITHOUT_PROGRESS; x++) {
 
-        for (int i = 0; i < POPULATION_SIZE / 10; i++) {
+        for (int i = 0; i < POPULATION_SIZE / 20; i++) {
             this->breeding(population);
         }
 
