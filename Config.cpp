@@ -5,6 +5,7 @@ const int POPULATION_SIZE = 256;
 
 const int MAX_WITHOUT_PROGRESS = 1000;
 
+const int MAX_SECONDS = 5 * 60;
 // In percentage
 const int MUTATION_PROBABILITY = 20;
 

@@ -13,7 +13,11 @@ Get-ChildItem .\instances\ | where Name -notlike "*_best*" | sort Name | % {
 
   $currBest = get-content $path.Replace(".txt", "_best.txt") -First 1;
   "$result - current best: $currBest";
-  "Execution took $($time.Minutes):$($time.Seconds)min";
+
+  $minutes = $time.Minutes.ToString().PadLeft(2, "0");
+  $seconds = $time.Seconds.ToString().PadLeft(2, "0");
+
+  "Execution took $($minutes):$($seconds)min";
 
   Write-Host "";
 }

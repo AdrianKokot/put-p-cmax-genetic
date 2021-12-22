@@ -3,6 +3,7 @@
 #include <fstream>
 #include <ctime>
 #include <iomanip>
+#include <chrono>
 
 // Printing
 void Genetic::print(int *genotype) {
@@ -227,14 +228,24 @@ Genetic::Genetic(InputData *inputData) {
     this->random = new Random(this->input->processes, this->input->processors);
 }
 
+long getElapsedSeconds( std::chrono::steady_clock::time_point begin) {
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::seconds> (end - begin).count();
+
+    return duration;
+}
+
+
 int Genetic::getResult() {
     pair<int, int *> best = make_pair(INT_MIN, new int[this->input->processes]{0});
 
     int withoutProgress = 0;
     auto population = this->generateGreedyPopulation();
 
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
     int x = 0;
-    for (x = 0; x < INT_MAX && withoutProgress < MAX_WITHOUT_PROGRESS; x++) {
+    for (x = 0; getElapsedSeconds(begin) < MAX_SECONDS && x < INT_MAX && withoutProgress < MAX_WITHOUT_PROGRESS; x++) {
 
         for (int i = 0; i < POPULATION_SIZE / 20; i++) {
             this->breeding(population);
