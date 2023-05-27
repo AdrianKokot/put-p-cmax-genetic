@@ -20,6 +20,8 @@ m lines with duration of the given task
 g++ -I./Genetic -I./Shared -I./Greedy .\Shared\*.cpp .\Greedy\*.cpp .\Genetic\*.cpp main.cpp Config.cpp
 ```
 
+or use Make
+
 ### run-xxx.ps1
 
 Files called `run-ranking.ps1` and `run-benchmark.ps1` are powershell scripts that run all instances in `instances` or `instances/report` directories.

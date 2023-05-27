@@ -4,6 +4,7 @@
 #include <ctime>
 #include <iomanip>
 #include <chrono>
+#include <climits>
 
 // Printing
 void Genetic::print(int *genotype) {

@@ -1,4 +1,4 @@
-g++ -I./Genetic -I./Shared -I./Greedy .\Shared\*.cpp .\Greedy\*.cpp .\Genetic\*.cpp main.cpp Config.cpp -o result.exe
+g++ -I./Genetic -I./Shared -I./Greedy .\Shared\*.cpp .\Greedy\*.cpp .\Genetic\*.cpp main.cpp Config.cpp -o main
 
 Get-ChildItem .\instances\ | where Name -notlike "*_best*" | sort Name | % {
   $name = $_.Name;
@@ -8,7 +8,7 @@ Get-ChildItem .\instances\ | where Name -notlike "*_best*" | sort Name | % {
    $result = 0;
 
   $time = Measure-Command {
-  $result = .\result.exe $path;
+  $result = .\main $path;
   }
 
   $currBest = get-content $path.Replace(".txt", "_best.txt") -First 1;
@@ -22,4 +22,4 @@ Get-ChildItem .\instances\ | where Name -notlike "*_best*" | sort Name | % {
   Write-Host "";
 }
 
-rm .\result.exe
+rm .\main
