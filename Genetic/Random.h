@@ -20,6 +20,8 @@ private:
     uniform_int_distribution<int> processDistr;
     uniform_int_distribution<int> processorDistr;
     uniform_int_distribution<int> percentageDistr;
+    int processCount;
+    int processorCount;
 };
 
 

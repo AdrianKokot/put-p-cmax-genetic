@@ -2,39 +2,53 @@
 #include "Greedy/Greedy.h"
 #include "Shared/Reader.h"
 #include "Genetic/Genetic.h"
+#include <omp.h>
+#include <chrono>
+#include <iostream>
+#include <iomanip>
+#include <limits>
+#include <numbers>
 
 using namespace std;
 
-int main(int argc, char *argv[]) {
-    try {
-        auto inputData = Reader::readInput(argc, argv);
+pair<int, double> run_for_threads_num(InputData *inputData, int threads_num)
+{
+#if defined(_OPENMP)
+  omp_set_num_threads(threads_num);
+#endif
 
-        auto genetic = new Genetic(inputData);
-        int geneticResult = genetic->getResult();
+  auto genetic = new Genetic(inputData);
 
-        cout << geneticResult;
+  auto start = chrono::high_resolution_clock::now();
+  int geneticResult = genetic->getResult();
+  auto end = chrono::high_resolution_clock::now();
 
-        fstream output;
+  auto duration = chrono::duration_cast<chrono::nanoseconds>(end - start).count() / 1000000000.0;
 
-        auto logFileName = inputData->fileName.replace(inputData->fileName.length() - 4, 9, "_best.txt");
+  return make_pair(geneticResult, duration);
+}
 
-        output.open(logFileName,ios::in);
+int main(int argc, char *argv[])
+{
+  auto inputData = Reader::readInput(argc, argv);
 
-        int bestFromFile;
-        output >> bestFromFile;
+  cout << "| " << setw(10) << "Threads"
+       << " | " << setw(10) << "Time"
+       << " | " << setw(10) << "Result"
+       << " | " << setw(10) << "Speedup"
+       << " |" << endl
+       << "| ---------- | ---------- | ---------- | ---------- |" << endl;
 
-        if (geneticResult < bestFromFile) {
-            output.close();
+  auto sec = run_for_threads_num(inputData, 1);
 
-            output.open(logFileName, ios::out | ios::trunc);
-            output << geneticResult << endl << endl;
+  cout << "| " << setw(10) << "1"
+       << " | " << setw(10) << fixed << setprecision(7) << sec.second << " | " << setw(10) << sec.first << " | " << setw(10) << fixed << setprecision(7) << 1.0 << " |" << endl;
 
-            genetic->visualize(output);
-        }
+  for (int threads = 2; threads <= 12; threads++)
+  {
+    auto par = run_for_threads_num(inputData, threads);
+    cout << "| " << setw(10) << threads << " | " << setw(10) << fixed << setprecision(7) << par.second << " | " << setw(10) << par.first << " | " << setw(10) << fixed << setprecision(7) << sec.second / par.second << " |" << endl;
+  }
 
-    } catch (const char *msg) {
-        cout << msg;
-    }
-
-    return 0;
+  return 0;
 }

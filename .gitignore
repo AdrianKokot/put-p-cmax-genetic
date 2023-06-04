@@ -39,3 +39,8 @@ obj
 
 logs/*.log
 main
+
+*_benchmark.txt
+cpu.txt
+mem.txt
+prop_json*

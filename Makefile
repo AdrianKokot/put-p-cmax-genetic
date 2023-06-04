@@ -1,10 +1,20 @@
-FILENAME = $(shell ls instances/*.txt | grep -v _best.txt$ | head -1)
+# FLAGS=-DCSV
+FLAGS=-O3
+FILE=./instances/1m25.txt
+THREADS=1
 
 main:	clean
-	g++ -I./Genetic -I./Shared -I./Greedy ./Shared/*.cpp ./Greedy/*.cpp ./Genetic/*.cpp main.cpp Config.cpp -o main
+	g++ -I./Genetic -I./Shared -I./Greedy ./Shared/*.cpp ./Greedy/*.cpp ./Genetic/*.cpp main.cpp Config.cpp -o main.out $(FLAGS)
+
+main-s: clean
+	g++ -I./Genetic -I./Shared -I./Greedy ./Shared/*.cpp ./Greedy/*.cpp ./Genetic/*.cpp main.cpp Config.cpp -o main.out $(FLAGS) -fopenmp
 
 clean:
-	rm -f main
+	rm -f main.out
 
-run: main
-	./main $(FILENAME)
+run-s: main-s run-main
+
+run: main run-main
+
+run-main:
+	./main.out $(FILE) $(THREADS)
